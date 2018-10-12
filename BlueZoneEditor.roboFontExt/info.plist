@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>addToMenu</key>
+	<array/>
+	<key>developer</key>
+	<string>Andy Clymer</string>
+	<key>developerURL</key>
+	<string>http://www.andyclymer.com/</string>
+	<key>html</key>
+	<true/>
+	<key>launchAtStartUp</key>
+	<true/>
+	<key>mainScript</key>
+	<string>Blues.py</string>
+	<key>name</key>
+	<string>Blue Zone Editor</string>
+	<key>requiresVersionMajor</key>
+	<string>3</string>
+	<key>requiresVersionMinor</key>
+	<string>1</string>
+	<key>timeStamp</key>
+	<real>1539367334.0092931</real>
+	<key>version</key>
+	<string>0.9</string>
+</dict>
+</plist>
