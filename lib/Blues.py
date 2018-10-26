@@ -8,12 +8,6 @@ from mojo.extensions import ExtensionBundle
 Blue Zone Editor
 by Andy Clymer, October 2018
 
-
-
-To Do:
-    - Fix the Return and Delete character codes, so that they work with non-US keyboards
-    - Display zone coordinates
-
 """
 
 
@@ -138,10 +132,10 @@ class BlueZone(object):
         dt.strokeWidth(3*scale)
         for selectedPoint in selectedPoints:
             dt.newPath()
-            dt.moveTo((selectedPoint[0]-30, selectedPoint[1]))
-            dt.lineTo((selectedPoint[0]+30, selectedPoint[1]))
+            dt.moveTo((-30, selectedPoint[1]))
+            dt.lineTo((30, selectedPoint[1]))
             dt.drawPath()
-        # Draw the zome locations
+        # Draw the zone locations and its type
         if len(selectedPoints):
             dt.fill(r=0, g=0, b=1, a=0.5)
             dt.stroke(None)
@@ -156,6 +150,11 @@ class BlueZone(object):
             else: offset = 0
             dt.textBox(str(positions[0]), (-100, positions[0]-size[1]-offset, 200, size[1]), align="center")
             dt.textBox(str(positions[1]), (-100, positions[1], 200, size[1]+(2*scale)), align="center")
+            # Write the name type
+            if self.isOther:
+                typeText = "OtherBlue"
+            else: typeText = "BlueValue"
+            dt.textBox(typeText, (-100, positions[1], 200, size[1]*2), align="center")
         
 
 
@@ -324,13 +323,20 @@ class BlueEdit(BaseEventTool):
             newZoneRanges = []
             for zone in self.zones:
                 if zone.isOther == isOther:
-                    thisZoneRange = [zone.startPosition, zone.endPosition]
+                    thisZoneRange = [int(round(zone.startPosition)), int(round(zone.endPosition))]
                     thisZoneRange.sort()
                     newZoneRanges.append(thisZoneRange)
-            newZoneRanges.sort(key=lambda x: x[0])
-            # Flatten the list
-            newZoneRanges = [int(round(v)) for r in newZoneRanges for v in r]
-            # @@@ Compress the list to remove overlaps
+            if len(newZoneRanges):
+                # Sort and combine overlapping zones
+                newZoneRanges.sort(key=lambda x: x[0])
+                newZones = [list(newZoneRanges[0])]
+                for z in newZoneRanges:
+                    if z[0] < newZones[-1][1]:
+                        if z[1] > newZones[-1][1]:
+                            newZones[-1][1] = z[1]
+                    else: newZones += [list(z)]
+                # Flatten the pairs into a single list
+                newZoneRanges = [int(round(v)) for r in newZones for v in r]
             # Apply
             self.currentlyUpdatingInfo = True
             self.font.info.prepareUndo("Zone change")
@@ -338,12 +344,6 @@ class BlueEdit(BaseEventTool):
             self.font.info.performUndo()
             self.currentlyUpdatingInfo = False
 
-
-    def compressZones(self):
-        # Combine overlapping zones
-        # @@@ To do!
-        pass
-    
     
     def selectClosestZoneEdge(self, point, keepSelection=False, distance=6):
         # Find the closest zone edge to the location and select it
