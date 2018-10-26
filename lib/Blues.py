@@ -7,6 +7,13 @@ from mojo.extensions import ExtensionBundle
 """
 Blue Zone Editor
 by Andy Clymer, October 2018
+
+
+
+To Do:
+    - Fix the Return and Delete character codes, so that they work with non-US keyboards
+    - Display zone coordinates
+
 """
 
 
@@ -60,6 +67,8 @@ class BlueZone(object):
             elif self.endSelected and not self.startSelected:
                 self.startSelected = True
                 self.endSelected = False
+        self.startPosition = int(round(self.startPosition))
+        self.endPosition = int(round(self.endPosition))
             
     @property
     def selected(self):
@@ -132,6 +141,22 @@ class BlueZone(object):
             dt.moveTo((selectedPoint[0]-30, selectedPoint[1]))
             dt.lineTo((selectedPoint[0]+30, selectedPoint[1]))
             dt.drawPath()
+        # Draw the zome locations
+        if len(selectedPoints):
+            dt.fill(r=0, g=0, b=1, a=0.5)
+            dt.stroke(None)
+            positions = [self.startPosition, self.endPosition]
+            positions.sort()
+            dt.font("LucidaGrande-Bold")
+            dt.fontSize(12 * scale)
+            size = dt.textSize(str(0), align=None)
+            zoneHeight = positions[1] - positions[0]
+            if zoneHeight < 10:
+                offset = 10 - zoneHeight
+            else: offset = 0
+            dt.textBox(str(positions[0]), (-100, positions[0]-size[1]-offset, 200, size[1]), align="center")
+            dt.textBox(str(positions[1]), (-100, positions[1], 200, size[1]+(2*scale)), align="center")
+        
 
 
 
@@ -169,7 +194,7 @@ class BlueEdit(BaseEventTool):
         return toolbarIcon
 
     def getToolbarTip(self):
-        return "Blue Edit"
+        return "Blue Zones"
         
         
     # Observer callbacks
@@ -177,10 +202,11 @@ class BlueEdit(BaseEventTool):
     def fontChangedCallback(self, info):
         # Forget any font-specific settings and observe on the font info
         cf = CurrentFont()
+        # If there really is a new font
         if not self.font == cf:
-            # There really is a new font
+            # If there was an old font
             if not self.font == None:
-                # If there was an old font, apply the zones before switching
+                # Apply the zones before switching
                 self.applyZones()
                 self.font.info.removeObserver(self, "Info.Changed")
             self.font = cf
