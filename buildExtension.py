@@ -13,7 +13,7 @@ resourcesPath = os.path.join(basePath, "resources")
 B = ExtensionBundle()
 
 B.name = "Blue Zone Editor"
-B.version = "0.11"
+B.version = "0.12"
 B.mainScript = "Blues.py"
 
 B.developer = "Andy Clymer"
