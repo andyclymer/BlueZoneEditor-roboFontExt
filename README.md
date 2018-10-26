@@ -2,6 +2,8 @@
 
 by Andy Clymer, [www.andyclymer.com](http://www.andyclymer.com)
 
+![Blue Zone Editor Icon](/resources/icon.png?raw=true)
+
 Easily edit the PostScript “Blue Zones”
 
 - Add a new zone by double-clicking in the glyph drawing area
