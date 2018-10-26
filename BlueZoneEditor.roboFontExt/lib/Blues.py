@@ -182,7 +182,7 @@ class BlueEdit(BaseEventTool):
         setGlyphViewDisplaySettings(self.previousDisplaySettings)
         # Observers
         removeObserver(self, "fontBecameCurrent")
-        if self.font:
+        if not self.font == None:
             self.applyZones()
             self.font.info.removeObserver(self, "Info.Changed")
 
