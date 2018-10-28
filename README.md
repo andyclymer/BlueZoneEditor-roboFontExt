@@ -4,6 +4,8 @@ by Andy Clymer, [www.andyclymer.com](http://www.andyclymer.com)
 
 ![Blue Zone Editor Icon](/resources/icon.png?raw=true)
 
+Download it here, or find it in the Mechanic 2 extension
+
 Easily edit the PostScript “Blue Zones”
 
 - Add a new zone by double-clicking in the glyph drawing area
