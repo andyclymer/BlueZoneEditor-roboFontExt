@@ -155,8 +155,8 @@ class BlueZone(object):
                 typeText = "OtherBlue"
             else: typeText = "BlueValue"
             dt.textBox(typeText, (-100, positions[1], 200, size[1]*2), align="center")
-        
-
+        dt.fill(None)
+        dt.stroke(None)
 
 
 
