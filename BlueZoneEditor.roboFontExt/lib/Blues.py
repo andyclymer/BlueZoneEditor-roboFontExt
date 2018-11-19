@@ -32,6 +32,7 @@ class BlueZone(object):
     """
     
     def __init__(self, startPosition, endPosition, isOther=False):
+        self.alwaysShowLabels = getDefault("com.andyclymer.blueZoneEditor.alwaysShowLabels", defaultValue=False)
         self.startPosition = startPosition
         self.startSelected = False # and the mouse offset if it is selected
         self.endPosition = endPosition
@@ -136,7 +137,7 @@ class BlueZone(object):
             dt.lineTo((30, selectedPoint[1]))
             dt.drawPath()
         # Draw the zone locations and its type
-        if len(selectedPoints):
+        if len(selectedPoints) or self.alwaysShowLabels:
             dt.fill(r=0, g=0, b=1, a=0.5)
             dt.stroke(None)
             positions = [self.startPosition, self.endPosition]
@@ -151,10 +152,13 @@ class BlueZone(object):
             dt.textBox(str(positions[0]), (-100, positions[0]-size[1]-offset, 200, size[1]), align="center")
             dt.textBox(str(positions[1]), (-100, positions[1], 200, size[1]+(2*scale)), align="center")
             # Write the name type
-            if self.isOther:
-                typeText = "OtherBlue"
-            else: typeText = "BlueValue"
-            dt.textBox(typeText, (-100, positions[1], 200, size[1]*2), align="center")
+            if len(selectedPoints):
+                if self.isOther:
+                    typeText = "OtherBlue"
+                    dt.textBox(typeText, (-100, positions[0]-(size[1]*3)-offset, 200, size[1]*2), align="center")
+                else:
+                    typeText = "BlueValue"
+                    dt.textBox(typeText, (-100, positions[1], 200, size[1]*2), align="center")
         dt.fill(None)
         dt.stroke(None)
 
